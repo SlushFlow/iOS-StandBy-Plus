@@ -22,10 +22,12 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Show available SDKs
-        run: xcodebuild -showsdks
+      - name: Show build environment
+        run: |
+          xcodebuild -version
+          xcodebuild -list -project StandByPlus.xcodeproj
 
-      - name: Build unsigned app
+      - name: Build ad-hoc signed app
         run: |
           set -euo pipefail
           xcodebuild \
@@ -33,28 +35,93 @@ jobs:
             -scheme StandByPlus \
             -configuration Release \
             -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath build/DerivedData \
-            CODE_SIGNING_ALLOWED=NO \
+            ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="-" \
-            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=YES \
+            CODE_SIGNING_REQUIRED=YES \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
             DEVELOPMENT_TEAM="" \
+            ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES=YES \
             build
+
+      - name: Verify app bundle
+        run: |
+          set -euo pipefail
+          APP_PATH="build/DerivedData/Build/Products/Release-iphoneos/StandByPlus.app"
+          if [ ! -d "$APP_PATH" ]; then
+            echo "App bundle not found at $APP_PATH" >&2
+            find build/DerivedData -name '*.app' -print >&2
+            exit 1
+          fi
+
+          EXEC="$APP_PATH/StandByPlus"
+          if [ ! -f "$EXEC" ]; then
+            echo "Missing Mach-O executable at $EXEC" >&2
+            ls -laR "$APP_PATH" >&2
+            exit 1
+          fi
+
+          EXEC_SIZE=$(stat -f%z "$EXEC")
+          APP_SIZE=$(du -sk "$APP_PATH" | awk '{print $1}')
+          echo "Executable size: ${EXEC_SIZE} bytes"
+          echo "App bundle size: ${APP_SIZE} KB"
+          echo "App bundle contents:"
+          ls -la "$APP_PATH"
+          if [ -d "$APP_PATH/Frameworks" ]; then
+            echo "Embedded frameworks:"
+            ls -la "$APP_PATH/Frameworks"
+          else
+            echo "WARNING: No Frameworks directory found. Attempting to embed Swift runtime..."
+            mkdir -p "$APP_PATH/Frameworks"
+            xcrun swift-stdlib-tool \
+              --copy \
+              --scan-executable "$EXEC" \
+              --scan-folder "$APP_PATH/Frameworks" \
+              --scan-folder "$APP_PATH/PlugIns" \
+              --scan-folder "$APP_PATH/SystemExtensions" \
+              --scan-folder "$APP_PATH/Extensions" \
+              --platform iphoneos \
+              --destination "$APP_PATH/Frameworks"
+            codesign --force --sign - --timestamp=none "$APP_PATH/Frameworks/"*.dylib 2>/dev/null || true
+            codesign --force --sign - --deep --timestamp=none "$APP_PATH"
+            if [ -d "$APP_PATH/Frameworks" ]; then
+              echo "Swift runtime embedded:"
+              ls -la "$APP_PATH/Frameworks"
+            fi
+          fi
+
+          APP_SIZE=$(du -sk "$APP_PATH" | awk '{print $1}')
+          echo "Final app bundle size: ${APP_SIZE} KB"
+
+          if [ "$EXEC_SIZE" -lt 400000 ]; then
+            echo "ERROR: Executable is too small (${EXEC_SIZE} bytes). Build is likely incomplete." >&2
+            exit 1
+          fi
+
+          if [ "$APP_SIZE" -lt 1000 ]; then
+            echo "ERROR: App bundle is too small (${APP_SIZE} KB). Expected at least 1 MB." >&2
+            exit 1
+          fi
 
       - name: Package unsigned IPA
         run: |
           set -euo pipefail
-          APP_PATH="$(find build/DerivedData -type d -name 'StandByPlus.app' | head -n 1)"
-          if [ -z "$APP_PATH" ]; then
-            echo "StandByPlus.app not found"
-            exit 1
-          fi
-          echo "Found app at: $APP_PATH"
+          APP_PATH="build/DerivedData/Build/Products/Release-iphoneos/StandByPlus.app"
           rm -rf build/Payload
           mkdir -p build/Payload
           cp -R "$APP_PATH" build/Payload/
           cd build
           rm -f StandByPlus-unsigned.ipa
-          zip -r StandByPlus-unsigned.ipa Payload
+          /usr/bin/zip -qry StandByPlus-unsigned.ipa Payload
+          IPA_SIZE=$(stat -f%z StandByPlus-unsigned.ipa)
+          echo "IPA size: ${IPA_SIZE} bytes ($(echo "scale=1; $IPA_SIZE / 1048576" | bc) MB)"
+          if [ "$IPA_SIZE" -lt 1000000 ]; then
+            echo "ERROR: IPA is too small (${IPA_SIZE} bytes). Expected at least 1 MB (typically 5–20 MB with Swift runtime)." >&2
+            exit 1
+          fi
           ls -lh StandByPlus-unsigned.ipa
 
       - name: Upload IPA artifact
@@ -63,6 +130,7 @@ jobs:
           name: StandByPlus-unsigned-ipa
           path: build/StandByPlus-unsigned.ipa
           if-no-files-found: error
+          compression-level: 0
 
       - name: Upload to release on tag
         if: startsWith(github.ref, 'refs/tags/v')

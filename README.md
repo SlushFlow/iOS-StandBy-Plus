@@ -34,7 +34,7 @@ A massive overhaul of the iPhone nightstand experience — built as a standalone
 
 ## Install via SideStore
 
-This project builds an **unsigned IPA** through GitHub Actions for sideloading with [SideStore](https://sidestore.io/).
+This project builds an IPA through GitHub Actions for sideloading with [SideStore](https://sidestore.io/). The CI build uses **ad-hoc signing** (`codesign -`) so the Swift runtime and frameworks are embedded in the bundle — without this step Xcode produces a ~170 KB shell with no runnable binary content. SideStore re-signs with your Apple ID on install.
 
 1. Open the **Actions** tab in this repository
 2. Select **Build Unsigned IPA** and run the workflow (or download the artifact from a completed run)
