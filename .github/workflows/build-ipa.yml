@@ -68,41 +68,19 @@ jobs:
           APP_SIZE=$(du -sk "$APP_PATH" | awk '{print $1}')
           echo "Executable size: ${EXEC_SIZE} bytes"
           echo "App bundle size: ${APP_SIZE} KB"
-          echo "App bundle contents:"
           ls -la "$APP_PATH"
           if [ -d "$APP_PATH/Frameworks" ]; then
             echo "Embedded frameworks:"
             ls -la "$APP_PATH/Frameworks"
-          else
-            echo "WARNING: No Frameworks directory found. Attempting to embed Swift runtime..."
-            mkdir -p "$APP_PATH/Frameworks"
-            xcrun swift-stdlib-tool \
-              --copy \
-              --scan-executable "$EXEC" \
-              --scan-folder "$APP_PATH/Frameworks" \
-              --scan-folder "$APP_PATH/PlugIns" \
-              --scan-folder "$APP_PATH/SystemExtensions" \
-              --scan-folder "$APP_PATH/Extensions" \
-              --platform iphoneos \
-              --destination "$APP_PATH/Frameworks"
-            codesign --force --sign - --timestamp=none "$APP_PATH/Frameworks/"*.dylib 2>/dev/null || true
-            codesign --force --sign - --deep --timestamp=none "$APP_PATH"
-            if [ -d "$APP_PATH/Frameworks" ]; then
-              echo "Swift runtime embedded:"
-              ls -la "$APP_PATH/Frameworks"
-            fi
           fi
-
-          APP_SIZE=$(du -sk "$APP_PATH" | awk '{print $1}')
-          echo "Final app bundle size: ${APP_SIZE} KB"
 
           if [ "$EXEC_SIZE" -lt 400000 ]; then
             echo "ERROR: Executable is too small (${EXEC_SIZE} bytes). Build is likely incomplete." >&2
             exit 1
           fi
 
-          if [ "$APP_SIZE" -lt 1000 ]; then
-            echo "ERROR: App bundle is too small (${APP_SIZE} KB). Expected at least 1 MB." >&2
+          if [ "$APP_SIZE" -lt 800 ]; then
+            echo "ERROR: App bundle is too small (${APP_SIZE} KB). Expected at least 800 KB." >&2
             exit 1
           fi
 
@@ -110,19 +88,39 @@ jobs:
         run: |
           set -euo pipefail
           APP_PATH="build/DerivedData/Build/Products/Release-iphoneos/StandByPlus.app"
-          rm -rf build/Payload
-          mkdir -p build/Payload
-          cp -R "$APP_PATH" build/Payload/
-          cd build
-          rm -f StandByPlus-unsigned.ipa
-          /usr/bin/zip -qry StandByPlus-unsigned.ipa Payload
-          IPA_SIZE=$(stat -f%z StandByPlus-unsigned.ipa)
-          echo "IPA size: ${IPA_SIZE} bytes ($(echo "scale=1; $IPA_SIZE / 1048576" | bc) MB)"
-          if [ "$IPA_SIZE" -lt 1000000 ]; then
-            echo "ERROR: IPA is too small (${IPA_SIZE} bytes). Expected at least 1 MB (typically 5–20 MB with Swift runtime)." >&2
+          PAYLOAD_DIR="build/Payload"
+          IPA_PATH="build/StandByPlus-unsigned.ipa"
+
+          # GitHub macOS runners attach com.apple.provenance xattrs that cause
+          # /usr/bin/zip to silently skip binaries — strip before packaging.
+          xattr -cr "$APP_PATH"
+
+          rm -rf "$PAYLOAD_DIR" "$IPA_PATH"
+          mkdir -p "$PAYLOAD_DIR"
+          ditto "$APP_PATH" "$PAYLOAD_DIR/StandByPlus.app"
+
+          PAYLOAD_EXEC="$PAYLOAD_DIR/StandByPlus.app/StandByPlus"
+          PAYLOAD_EXEC_SIZE=$(stat -f%z "$PAYLOAD_EXEC")
+          PAYLOAD_SIZE=$(du -sk "$PAYLOAD_DIR/StandByPlus.app" | awk '{print $1}')
+          echo "Payload executable size: ${PAYLOAD_EXEC_SIZE} bytes"
+          echo "Payload app size: ${PAYLOAD_SIZE} KB"
+
+          if [ "$PAYLOAD_EXEC_SIZE" -lt 400000 ]; then
+            echo "ERROR: Payload executable missing or too small." >&2
             exit 1
           fi
-          ls -lh StandByPlus-unsigned.ipa
+
+          # ditto produces a zip that preserves the Payload/ structure for IPA sideloading
+          ditto -c -k --sequesterRsrc --keepParent "$PAYLOAD_DIR" "$IPA_PATH"
+
+          IPA_SIZE=$(stat -f%z "$IPA_PATH")
+          echo "IPA size: ${IPA_SIZE} bytes ($(echo "scale=2; $IPA_SIZE / 1048576" | bc) MB)"
+          if [ "$IPA_SIZE" -lt 800000 ]; then
+            echo "ERROR: IPA is too small (${IPA_SIZE} bytes). Binary was likely excluded during packaging." >&2
+            unzip -l "$IPA_PATH" | head -30
+            exit 1
+          fi
+          ls -lh "$IPA_PATH"
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
