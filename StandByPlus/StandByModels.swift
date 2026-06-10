@@ -180,7 +180,7 @@ final class StandByViewModel: ObservableObject {
     }
 
     func moveWidget(_ widget: StandByWidget, to position: CGPoint, in bounds: CGSize) {
-        guard let index = widgets.firstIndex(of: widget) else { return }
+        guard let index = widgets.firstIndex(where: { $0.id == widget.id }) else { return }
 
         let dimensions = widget.size.dimensions
         let clampedX = min(max(position.x, dimensions.width / 2), max(dimensions.width / 2, bounds.width - dimensions.width / 2))
@@ -190,7 +190,7 @@ final class StandByViewModel: ObservableObject {
     }
 
     func toggleSize(for widget: StandByWidget) {
-        guard let index = widgets.firstIndex(of: widget) else { return }
+        guard let index = widgets.firstIndex(where: { $0.id == widget.id }) else { return }
         widgets[index].size = widgets[index].size == .medium ? .huge : .medium
     }
 
@@ -206,7 +206,9 @@ final class StandByViewModel: ObservableObject {
     }
 
     func acceptCall() {
-        callSession?.state = .active
+        guard var session = callSession else { return }
+        session.state = .active
+        callSession = session
     }
 
     func declineOrHangUpCall() {
@@ -224,11 +226,15 @@ final class StandByViewModel: ObservableObject {
     }
 
     func toggleMute() {
-        callSession?.isMuted.toggle()
+        guard var session = callSession else { return }
+        session.isMuted.toggle()
+        callSession = session
     }
 
     func toggleSpeaker() {
-        callSession?.isSpeakerEnabled.toggle()
+        guard var session = callSession else { return }
+        session.isSpeakerEnabled.toggle()
+        callSession = session
     }
 
     func togglePlayPause() {
