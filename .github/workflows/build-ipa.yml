@@ -1,0 +1,73 @@
+name: Build Unsigned IPA
+
+on:
+  push:
+    branches:
+      - main
+      - "cursor/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Show available SDKs
+        run: xcodebuild -showsdks
+
+      - name: Build unsigned app
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project StandByPlus.xcodeproj \
+            -scheme StandByPlus \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            DEVELOPMENT_TEAM="" \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          APP_PATH="$(find build/DerivedData -type d -name 'StandByPlus.app' | head -n 1)"
+          if [ -z "$APP_PATH" ]; then
+            echo "StandByPlus.app not found"
+            exit 1
+          fi
+          echo "Found app at: $APP_PATH"
+          rm -rf build/Payload
+          mkdir -p build/Payload
+          cp -R "$APP_PATH" build/Payload/
+          cd build
+          rm -f StandByPlus-unsigned.ipa
+          zip -r StandByPlus-unsigned.ipa Payload
+          ls -lh StandByPlus-unsigned.ipa
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StandByPlus-unsigned-ipa
+          path: build/StandByPlus-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Upload to release on tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/StandByPlus-unsigned.ipa
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
