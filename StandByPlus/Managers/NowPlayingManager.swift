@@ -184,7 +184,3 @@ final class NowPlayingManager: ObservableObject {
         elapsed = 0
     }
 }
-
-private extension MediaRemoteBridge {
-    func send(_ command: MRBCommand) { sendCommand(command) }
-}
