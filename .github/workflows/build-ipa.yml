@@ -114,10 +114,19 @@ jobs:
           ditto -c -k --sequesterRsrc --keepParent "$PAYLOAD_DIR" "$IPA_PATH"
 
           IPA_SIZE=$(stat -f%z "$IPA_PATH")
-          echo "IPA size: ${IPA_SIZE} bytes ($(echo "scale=2; $IPA_SIZE / 1048576" | bc) MB)"
-          if [ "$IPA_SIZE" -lt 800000 ]; then
-            echo "ERROR: IPA is too small (${IPA_SIZE} bytes). Binary was likely excluded during packaging." >&2
-            unzip -l "$IPA_PATH" | head -30
+          UNCOMPRESSED_SIZE=$(unzip -l "$IPA_PATH" | tail -1 | awk '{print $1}')
+          BINARY_SIZE=$(unzip -l "$IPA_PATH" | awk '/StandByPlus.app\/StandByPlus$/ {print $1}')
+          echo "IPA zip size: ${IPA_SIZE} bytes ($(echo "scale=2; $IPA_SIZE / 1048576" | bc) MB)"
+          echo "IPA uncompressed size: ${UNCOMPRESSED_SIZE} bytes"
+          echo "IPA binary size: ${BINARY_SIZE} bytes"
+          if [ "${BINARY_SIZE:-0}" -lt 400000 ]; then
+            echo "ERROR: StandByPlus Mach-O binary missing or too small inside IPA." >&2
+            unzip -l "$IPA_PATH"
+            exit 1
+          fi
+          if [ "${UNCOMPRESSED_SIZE:-0}" -lt 800000 ]; then
+            echo "ERROR: IPA contents too small (${UNCOMPRESSED_SIZE} bytes uncompressed)." >&2
+            unzip -l "$IPA_PATH"
             exit 1
           fi
           ls -lh "$IPA_PATH"

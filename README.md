@@ -34,7 +34,9 @@ A massive overhaul of the iPhone nightstand experience — built as a standalone
 
 ## Install via SideStore
 
-This project builds an IPA through GitHub Actions for sideloading with [SideStore](https://sidestore.io/). The CI build uses **ad-hoc signing** (`codesign -`) so the Swift runtime and frameworks are embedded in the bundle — without this step Xcode produces a ~170 KB shell with no runnable binary content. SideStore re-signs with your Apple ID on install.
+This project builds an IPA through GitHub Actions for sideloading with [SideStore](https://sidestore.io/). The CI build uses **ad-hoc signing** (`codesign -`) so Xcode links and signs the app properly. SideStore re-signs with your Apple ID on install.
+
+**Expected IPA size:** A Release build for iOS 17+ is ~1–2 MB uncompressed inside the IPA (the `.zip` itself may be ~300 KB–1 MB due to compression). If you see a ~170 KB IPA, the app binary was excluded during packaging — the current workflow strips macOS `com.apple.provenance` xattrs and uses `ditto` to avoid that. Very large 15+ MB IPAs usually come from Debug builds or older apps that embed the full Swift runtime; iOS 17 apps use the OS Swift libraries instead.
 
 1. Open the **Actions** tab in this repository
 2. Select **Build Unsigned IPA** and run the workflow (or download the artifact from a completed run)
