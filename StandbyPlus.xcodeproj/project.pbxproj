@@ -1,0 +1,279 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A1B2C3D41234567890ABCDE1 /* StandbyPlusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D31234567890ABCDE1 /* StandbyPlusApp.swift */; };
+		A1B2C3D41234567890ABCDE2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D31234567890ABCDE2 /* ContentView.swift */; };
+		A1B2C3D41234567890ABCDE3 /* StandbyPlusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D31234567890ABCDE3 /* StandbyPlusViewModel.swift */; };
+		A1B2C3D41234567890ABCDE4 /* StandbyPlusModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D31234567890ABCDE4 /* StandbyPlusModels.swift */; };
+		A1B2C3D41234567890ABCDE5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D31234567890ABCDE5 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A1B2C3D31234567890ABCDE0 /* StandbyPlus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StandbyPlus.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1B2C3D31234567890ABCDE1 /* StandbyPlusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandbyPlusApp.swift; sourceTree = "<group>"; };
+		A1B2C3D31234567890ABCDE2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A1B2C3D31234567890ABCDE3 /* StandbyPlusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandbyPlusViewModel.swift; sourceTree = "<group>"; };
+		A1B2C3D31234567890ABCDE4 /* StandbyPlusModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandbyPlusModels.swift; sourceTree = "<group>"; };
+		A1B2C3D31234567890ABCDE5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A1B2C3D31234567890ABCDE6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A1B2C3D51234567890ABCDE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A1B2C3D61234567890ABCDE1 = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D61234567890ABCDE2 /* StandbyPlus */,
+				A1B2C3D61234567890ABCDE3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A1B2C3D61234567890ABCDE2 /* StandbyPlus */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D31234567890ABCDE1 /* StandbyPlusApp.swift */,
+				A1B2C3D31234567890ABCDE2 /* ContentView.swift */,
+				A1B2C3D31234567890ABCDE3 /* StandbyPlusViewModel.swift */,
+				A1B2C3D31234567890ABCDE4 /* StandbyPlusModels.swift */,
+				A1B2C3D31234567890ABCDE5 /* Assets.xcassets */,
+				A1B2C3D31234567890ABCDE6 /* Info.plist */,
+			);
+			path = StandbyPlus;
+			sourceTree = "<group>";
+		};
+		A1B2C3D61234567890ABCDE3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D31234567890ABCDE0 /* StandbyPlus.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A1B2C3D71234567890ABCDE1 /* StandbyPlus */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A1B2C3D81234567890ABCDE1 /* Build configuration list for PBXNativeTarget "StandbyPlus" */;
+			buildPhases = (
+				A1B2C3D51234567890ABCDE2 /* Sources */,
+				A1B2C3D51234567890ABCDE1 /* Frameworks */,
+				A1B2C3D51234567890ABCDE3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StandbyPlus;
+			productName = StandbyPlus;
+			productReference = A1B2C3D31234567890ABCDE0 /* StandbyPlus.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A1B2C3D71234567890ABCDE2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					A1B2C3D71234567890ABCDE1 = {
+						CreatedOnToolsVersion = 16.1;
+					};
+				};
+			};
+			buildConfigurationList = A1B2C3D81234567890ABCDE2 /* Build configuration list for PBXProject "StandbyPlus" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A1B2C3D61234567890ABCDE1;
+			productRefGroup = A1B2C3D61234567890ABCDE3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A1B2C3D71234567890ABCDE1 /* StandbyPlus */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A1B2C3D51234567890ABCDE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D41234567890ABCDE5 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A1B2C3D51234567890ABCDE2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1B2C3D41234567890ABCDE2 /* ContentView.swift in Sources */,
+				A1B2C3D41234567890ABCDE1 /* StandbyPlusApp.swift in Sources */,
+				A1B2C3D41234567890ABCDE3 /* StandbyPlusViewModel.swift in Sources */,
+				A1B2C3D41234567890ABCDE4 /* StandbyPlusModels.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A1B2C3D91234567890ABCDE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		A1B2C3D91234567890ABCDE2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A1B2C3D91234567890ABCDE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StandbyPlus/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.standbyplus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A1B2C3D91234567890ABCDE4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = StandbyPlus/Info.plist;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.standbyplus;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A1B2C3D81234567890ABCDE1 /* Build configuration list for PBXNativeTarget "StandbyPlus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D91234567890ABCDE3 /* Debug */,
+				A1B2C3D91234567890ABCDE4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A1B2C3D81234567890ABCDE2 /* Build configuration list for PBXProject "StandbyPlus" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A1B2C3D91234567890ABCDE1 /* Debug */,
+				A1B2C3D91234567890ABCDE2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A1B2C3D71234567890ABCDE2 /* Project object */;
+}
